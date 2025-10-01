@@ -144,7 +144,7 @@ int main()
 
     while (win == 0)
     {
-        printf("\nPlayer %c, choose a column (1-7): ", currentPlayer);
+        printf("\nPlayer %c, choose a column (1-7): \n", currentPlayer);
         int column;
         scanf("%d", &column);
 
