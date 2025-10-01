@@ -148,7 +148,7 @@ int main()
         int column;
         scanf("%d", &column);
 
-        if (column < 1 || column > COLS || column)
+        if (column < 1 || column > 7 || column)
         {
             printf("Invalid column. Choose between 1 and %d.\n", COLS);
             continue;
