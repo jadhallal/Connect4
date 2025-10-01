@@ -41,7 +41,7 @@ int updateMatrix(int C, char player, char **matrix)
 
 int winCheck(int R, int C, char player, char **matrix)
 {
-    C = C - 1; // adjust to 0-based column
+    C = C - 1; 
 
     // row check
     int count = 0;
@@ -148,7 +148,7 @@ int main()
         int column;
         scanf("%d", &column);
 
-        if (column < 1 || column > COLS)
+        if (column < 1 || column > COLS || column)
         {
             printf("Invalid column. Choose between 1 and %d.\n", COLS);
             continue;
