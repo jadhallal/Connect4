@@ -148,13 +148,13 @@ int main()
         int column;
         if(scanf("%d", &column) != 1){
             printf("Please enter a valid nummber!");
-            continue;
+            exit(1);
         }
         
         if (column < 1 || column > 7 )
         {
             printf("Invalid column. Choose between 1 and %d.\n", COLS);
-            exit(1);
+            
         }
 
         int row = updateMatrix(column, currentPlayer, matrix);
