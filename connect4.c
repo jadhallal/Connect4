@@ -154,6 +154,7 @@ int main()
         if (column < 1 || column > 7 )
         {
             printf("Invalid column. Choose between 1 and %d.\n", COLS);
+            continue;
             
         }
 
