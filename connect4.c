@@ -146,8 +146,11 @@ int main()
     {
         printf("\nPlayer %c, choose a column (1-7): \n", currentPlayer);
         int column;
-        scanf("%d", &column);
-
+        if(scanf("%d", &column) != 1){
+            printf("Please enter a valid nummber!");
+            continue;
+        }
+        
         if (column < 1 || column > 7 )
         {
             printf("Invalid column. Choose between 1 and %d.\n", COLS);
