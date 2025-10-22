@@ -140,33 +140,59 @@ int main()
         matrix[i] = (char *)malloc(COLS * sizeof(char));
 
     for (int i = 0; i < ROWS; i++)
-    {
         for (int j = 0; j < COLS; j++)
-        {
             matrix[i][j] = '.';
+
+    printf("Choose the mode:\n1 (multiplayer)\n2 (easy bot)\n");
+    int n;
+    if (scanf("%d", &n) != 1)
+    {
+        printf("Please enter a valid number!\n");
+        exit(1);
+    }
+
+    while (n != 1 && n != 2)
+    {
+        printf("Please choose a valid number (1-2): ");
+        if (scanf("%d", &n) != 1)
+        {
+            printf("Please enter a valid number!\n");
+            exit(1);
         }
     }
 
     printMatrix(matrix);
+
     int win = 0;
     char playerA = 'A';
     char playerB = 'B';
     char currentPlayer = playerA;
+    int botMode = (n == 2);
 
     while (win == 0)
     {
-        printf("\nPlayer %c, choose a column (1-7): \n", currentPlayer);
         int column;
-        if(scanf("%d", &column) != 1){
-            printf("Please enter a valid nummber!");
-            exit(1);
-        }
-        
-        if (column < 1 || column > 7 )
+
+        if (botMode && currentPlayer == playerB)
         {
-            printf("Invalid column. Choose between 1 and %d.\n", COLS);
-            continue;
-            
+            column = EasyBot(matrix);
+            printf("Easy Bot chose column %d\n", column);
+        }
+        else
+        {
+            printf("\nPlayer %c, choose a column (1-7): ", currentPlayer);
+
+            if (scanf("%d", &column) != 1)
+            {
+                printf("Please enter a valid number!\n");
+                exit(1);
+            }
+
+            if (column < 1 || column > 7)
+            {
+                printf("Invalid column. Choose between 1 and %d.\n", COLS);
+                continue;
+            }
         }
 
         int row = updateMatrix(column, currentPlayer, matrix);
@@ -174,10 +200,14 @@ int main()
             continue;
 
         printMatrix(matrix);
+
         win = winCheck(row, column, currentPlayer, matrix);
         if (win == 1)
         {
-            printf("\nPlayer %c wins!\n", currentPlayer);
+            if (botMode && currentPlayer == playerB)
+                printf("\nEasy Bot wins!\n");
+            else
+                printf("\nPlayer %c wins!\n", currentPlayer);
             break;
         }
 
