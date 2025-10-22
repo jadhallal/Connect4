@@ -181,7 +181,7 @@ int main()
         }
         else
         {
-            printf("\nPlayer %c, choose a column (1-7): ", currentPlayer);
+            printf("\nPlayer %c, choose a column (1-7): \n", currentPlayer);
 
             if (scanf("%d", &column) != 1)
             {
