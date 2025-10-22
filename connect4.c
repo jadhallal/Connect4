@@ -121,6 +121,17 @@ int fullTable(char **matrix)
     return 1; 
 }
 
+int EasyBot(char **matrix)
+{
+    srand(time(NULL));
+    int r = (rand() % 7) + 1;
+    while (matrix[0][r] == 'A' || matrix[0][r] == 'B')
+    {
+        r = (rand() % 7) + 1;
+    }
+    return r;
+}
+
 int main()
 {
     char **matrix;
