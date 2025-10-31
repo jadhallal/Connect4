@@ -1,137 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-
-#define ROWS 6
-#define COLS 7
-
-void printMatrix(char **matrix)
-{
-    for (int i = 0; i < ROWS; i++)
-    {
-        for (int j = 0; j < COLS; j++)
-        {
-            printf("%c ", matrix[i][j]);
-        }
-        printf("\n");
-    }
-    printf("1 2 3 4 5 6 7\n");
-}
-
-int updateMatrix(int C, char player, char **matrix)
-{
-    int col = C - 1;
-
-    if (matrix[0][col] == 'A' || matrix[0][col] == 'B')
-    {
-        printf("Column is full. Choose another one\n");
-        return -1;
-    }
-
-    for (int i = ROWS - 1; i >= 0; i--)
-    {
-        if (matrix[i][col] == '.')
-        {
-            matrix[i][col] = player;
-            return i;
-        }
-    }
-
-    return -1;
-}
-
-int winCheck(int R, int C, char player, char **matrix)
-{
-    C = C - 1; 
-
-    // row check
-    int count = 0;
-    for (int i = 0; i < COLS; i++)
-    {
-        if (matrix[R][i] == player)
-            count++;
-        else
-            count = 0;
-        if (count == 4)
-            return 1;
-    }
-
-    // column check
-    // flag : check later if correct column checking
-    count = 0;
-    for (int i = 0; i < ROWS; i++)
-    {
-        if (matrix[i][C] == player)
-            count++;
-        else
-            count = 0;
-        if (count == 4)
-            return 1;
-    }
-
-    // diagonal checking up left till down right
-    count = 0;
-    int r = R, c = C;
-    while (r > 0 && c > 0)
-    {
-        r--;
-        c--;
-    }
-    while (r < ROWS && c < COLS)
-    {
-        if (matrix[r][c] == player)
-            count++;
-        else
-            count = 0;
-        if (count == 4)
-            return 1;
-        r++;
-        c++;
-    }
-
-    // diagonal checking up right till down left
-    count = 0;
-    r = R; c = C;
-    while (r < ROWS - 1 && c > 0)
-    {
-        r++;
-        c--;
-    }
-    while (r >= 0 && c < COLS)
-    {
-        if (matrix[r][c] == player)
-            count++;
-        else
-            count = 0;
-        if (count == 4)
-            return 1;
-        r--;
-        c++;
-    }
-
-    return 0;
-}
-
-int fullTable(char **matrix)
-{
-    for (int i = 0; i < COLS; i++)
-    {
-        if (matrix[0][i] == '.')
-            return 0; 
-    }
-    return 1; 
-}
-
-int EasyBot(char **matrix)
-{
-    srand(time(NULL));
-    int r = (rand() % 7) + 1;
-    while (matrix[0][r] == 'A' || matrix[0][r] == 'B')
-    {
-        r = (rand() % 7) + 1;
-    }
-    return r;
-}
+#include "easyBot.h"
+#include "mediumBot.h"
+#include "winCheck.h"
+#include "functions.h"
 
 int main()
 {
@@ -144,7 +16,7 @@ int main()
         for (int j = 0; j < COLS; j++)
             matrix[i][j] = '.';
 
-    printf("Choose the mode:\n1 (multiplayer)\n2 (easy bot)\n");
+    printf("Choose the mode:\n1 (multiplayer)\n2 (easy bot)\n3 (medium bot)\n");
     int n;
     if (scanf("%d", &n) != 1)
     {
@@ -152,9 +24,9 @@ int main()
         exit(1);
     }
 
-    while (n != 1 && n != 2)
+    while (n < 1 || n > 3)
     {
-        printf("Please choose a valid number (1-2): ");
+        printf("Please choose a valid number (1-2-3): ");
         if (scanf("%d", &n) != 1)
         {
             printf("Please enter a valid number!\n");
@@ -168,18 +40,29 @@ int main()
     char playerA = 'A';
     char playerB = 'B';
     char currentPlayer = playerA;
-    int botMode = (n == 2);
+    int easyBotMode = (n == 2);
+    int mediumBotMode = (n == 3);
 
     while (win == 0)
     {
         int column;
 
-        if (botMode && currentPlayer == playerB)
+        // Bot turn
+        if ((easyBotMode || mediumBotMode) && currentPlayer == playerB)
         {
-            column = EasyBot(matrix);
-            printf("Easy Bot chose column %d\n", column);
+            if (easyBotMode)
+            {
+                column = EasyBot(matrix);
+                printf("Easy Bot chose column %d\n", column);
+            }
+            else if (mediumBotMode)
+            {
+                printf("checking\n");
+                column = mediumBot(matrix);
+                printf("Medium Bot chose column %d\n", column);
+            }
         }
-        else
+        else // Player turn
         {
             printf("\nPlayer %c, choose a column (1-7): \n", currentPlayer);
 
@@ -189,7 +72,7 @@ int main()
                 exit(1);
             }
 
-            if (column < 1 || column > 7)
+            if (column < 1 || column > COLS)
             {
                 printf("Invalid column. Choose between 1 and %d.\n", COLS);
                 continue;
@@ -205,8 +88,10 @@ int main()
         win = winCheck(row, column, currentPlayer, matrix);
         if (win == 1)
         {
-            if (botMode && currentPlayer == playerB)
+            if (easyBotMode && currentPlayer == playerB)
                 printf("\nEasy Bot wins!\n");
+            else if (mediumBotMode && currentPlayer == playerB)
+                printf("\nMedium Bot wins!\n");
             else
                 printf("\nPlayer %c wins!\n", currentPlayer);
             break;
