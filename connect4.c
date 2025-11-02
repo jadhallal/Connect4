@@ -57,7 +57,7 @@ int main()
             }
             else if (mediumBotMode)
             {
-                printf("checking\n");
+                
                 column = mediumBot(matrix);
                 printf("Medium Bot chose column %d\n", column);
             }
