@@ -1,3 +1,6 @@
+#ifndef WINCHECK_H
+#define WINCHECK_H
+
 #include <stdio.h>
 
 #define ROWS 6
@@ -74,3 +77,4 @@ int winCheck(int R, int C, char player, char **matrix)
 
     return 0;
 }
+#endif
