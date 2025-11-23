@@ -77,6 +77,11 @@ int main()
             mediumBotMode = (n == 3);
             hardBotMode = (n == 4);
         }
+        else if(n==1){
+            easyBotMode=0;
+            mediumBotMode=0;
+            hardBotMode=0; 
+        }
 
         printMatrix(matrix);
 
