@@ -58,7 +58,7 @@ int main()
             else if (first == 'n')
                 currentPlayer = playerB;
 
-            while (first != 'n' || first != 'y')
+            while (first != 'n' && first != 'y')
             {
                 printf("Please choose 'y' or 'n': ");
                 scanf(" %c", &first);
@@ -73,6 +73,9 @@ int main()
                     break;
                 }
             }
+            easyBotMode = (n == 2);
+            mediumBotMode = (n == 3);
+            hardBotMode = (n == 4);
         }
 
         printMatrix(matrix);
@@ -191,7 +194,7 @@ int main()
             }
 
             printf("Choose the mode:\n1 (multiplayer)\n2 (easy bot)\n3 (medium bot)\n4 (hard bot)\n");
-            int n;
+
             if (scanf("%d", &n) != 1)
             {
                 printf("Please enter a valid number!\n");
