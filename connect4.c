@@ -49,18 +49,30 @@ int main()
         if (n == 2 || n == 3 || n == 4)
         {
             printf("\nDo you want to start first?\n");
-            printf("1 (yes)\n2 (no)\n");
-            int first;
-            if (scanf("%d", &first) != 1)
-            {
-                printf("Please enter a valid number!\n");
-                exit(1);
-            }
+            printf("yes (y)\nno (n)\n");
+            char first;
+            scanf("%c", &first);
 
-            if (first == 1)
+            if (first == 'y')
                 currentPlayer = playerA;
-            else
+            else if (first == 'n')
                 currentPlayer = playerB;
+
+            while (first != 'n' || first != 'y')
+            {
+                printf("Please choose 'y' or 'n': ");
+                scanf(" %c", &first);
+                if (first == 'y')
+                {
+                    currentPlayer = playerA;
+                    break;
+                }
+                else if (first == 'n')
+                {
+                    currentPlayer = playerB;
+                    break;
+                }
+            }
         }
 
         printMatrix(matrix);
@@ -93,16 +105,22 @@ int main()
             {
                 printf("\nPlayer %c, choose a column (1-7): \n", currentPlayer);
 
-                if (scanf("%d", &column) != 1)
+                while (1)
                 {
-                    printf("Please enter a valid number!\n");
-                    exit(1);
-                }
+                    if (scanf("%d", &column) != 1) // scanf failed (letter, symbol, etc.)
+                    {
+                        printf("Invalid input. Please enter a number between 1 and %d.\n", COLS);
 
-                if (column < 1 || column > COLS)
-                {
+                        while (getchar() != '\n')
+                            ;
+
+                        continue;
+                    }
+
+                    if (column >= 1 && column <= COLS)
+                        break;
+
                     printf("Invalid column. Choose between 1 and %d.\n", COLS);
-                    continue;
                 }
             }
 
@@ -135,21 +153,58 @@ int main()
             currentPlayer = (currentPlayer == playerA) ? playerB : playerA;
         }
 
-
         printf("\nDo you want to play again?\n");
-        printf("0 (yes)\n1 (no)\n");
-        if (scanf("%d", &again) != 1)
+        printf("yes or no (y/n): ");
+        char playAgain;
+        scanf(" %c", &playAgain);
+
+        if (playAgain == 'y')
+            again = 0;
+        else if (playAgain == 'n')
+            again = 1;
+
+        while (playAgain != 'y' && playAgain != 'n')
         {
-            printf("Please enter a valid number!\n");
-            exit(1);
+            printf("Please choose 'y' or 'n': ");
+            scanf(" %c", &playAgain);
+            if (playAgain == 'y')
+            {
+                again = 0;
+                break;
+            }
+            else if (playAgain == 'n')
+            {
+                again = 1;
+            }
         }
+
         if (again == 0)
         {
             // Reset the game
-            for (int i = 0; i < ROWS; i++){
-                for (int j = 0; j < COLS; j++){
+            for (int i = 0; i < ROWS; i++)
+            {
+                for (int j = 0; j < COLS; j++)
+                {
                     matrix[i][j] = '.';
                     win = 0;
+                }
+            }
+
+            printf("Choose the mode:\n1 (multiplayer)\n2 (easy bot)\n3 (medium bot)\n4 (hard bot)\n");
+            int n;
+            if (scanf("%d", &n) != 1)
+            {
+                printf("Please enter a valid number!\n");
+                exit(1);
+            }
+
+            while (n < 1 || n > 4)
+            {
+                printf("Please choose a valid number (1-2-3-4): ");
+                if (scanf("%d", &n) != 1)
+                {
+                    printf("Please enter a valid number!\n");
+                    exit(1);
                 }
             }
         }
